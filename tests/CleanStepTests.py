@@ -61,5 +61,21 @@ class ToLowerCaseCleanStep(unittest.TestCase):
         self.assertTrue(actual_data.equals(expected_data))
 
 
+class StopWordsCleanStep(unittest.TestCase):
+
+    def test_should_raise_exception_when_series_element_not_list(self):
+        data = ['not split document']
+        stop_words_clean_step = text_clean.StopWordsCleanStep(['some', 'words'])
+        with self.assertRaises(ValueError):
+            stop_words_clean_step(pd.Series(data))
+
+    def test_should_remove_stop_words_from_documents(self):
+        data = [['first', 'stop', 'document'], ['second', 'document', 'word']]
+        expected_data = pd.Series([['first', 'document'], ['second', 'document']])
+        stop_words_clean_step = text_clean.StopWordsCleanStep(['stop', 'word'])
+        actual_data = stop_words_clean_step(pd.Series(data))
+        self.assertTrue(actual_data.equals(expected_data))
+
+
 if __name__ == '__main__':
     unittest.main()

@@ -76,7 +76,7 @@ class StopWordsCleanStep(BaseCleanStep):
         self.stop_words = stop_words
 
     def __call__(self, *args, **kwargs):
-        documents_collection = super().__call__(args)
+        documents_collection = super().__call__(*args)
         if not isinstance(documents_collection[0], list):
             raise ValueError('This step should take series of list words from documents, but get {}'.format(
                 type(documents_collection[0])))
