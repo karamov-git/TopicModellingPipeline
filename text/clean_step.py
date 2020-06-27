@@ -7,13 +7,13 @@ import pymorphy2
 from pymorphy2.tagset import OpencorporaTag
 
 
-class AbstractCleanStep:
+class BaseCleanStep:
 
     def __init__(self):
         pass
 
     def __call__(self, *args, **kwargs):
-        if len(args) > 0:
+        if len(args) != 1:
             raise ValueError('arguments should contain single parameter')
         documents_collection = args[0]
         if not isinstance(documents_collection, pd.Series):
@@ -22,14 +22,14 @@ class AbstractCleanStep:
         return documents_collection
 
 
-class HTMLCleanStep(AbstractCleanStep):
+class HTMLCleanStep(BaseCleanStep):
 
     def __init__(self):
         super().__init__()
         pass
 
     def __call__(self, *args, **kwargs):
-        documents_collection = super().__call__(args)
+        documents_collection = super().__call__(*args)
         return documents_collection.apply(self.__extract_row_text_from_html)
 
     @staticmethod
@@ -39,17 +39,17 @@ class HTMLCleanStep(AbstractCleanStep):
         return html_free
 
 
-class NtlkTokenizeCleanStep(AbstractCleanStep):
+class NtlkTokenizeCleanStep(BaseCleanStep):
 
     def __init__(self):
         super().__init__()
 
     def __call__(self, *args, **kwargs):
-        documents_collection = super().__call__(args)
+        documents_collection = super().__call__(*args)
         return documents_collection.apply(word_tokenize)
 
 
-class ToLowerCaseDocumentCleanStep(AbstractCleanStep):
+class ToLowerCaseDocumentCleanStep(BaseCleanStep):
 
     def __init__(self):
         super().__init__()
@@ -59,7 +59,7 @@ class ToLowerCaseDocumentCleanStep(AbstractCleanStep):
         return documents_collection.apply(lambda document: document.lower())
 
 
-class RegexCleanStep(AbstractCleanStep):
+class RegexCleanStep(BaseCleanStep):
     def __init__(self, pattern, flags=0):
         super().__init__()
         self.regex = re.compile(pattern, flags)
@@ -69,7 +69,7 @@ class RegexCleanStep(AbstractCleanStep):
         return documents_collection.apply(lambda document: self.regex.sub(" ", document))
 
 
-class StopWordsCleanStep(AbstractCleanStep):
+class StopWordsCleanStep(BaseCleanStep):
 
     def __init__(self, stop_words: list):
         super().__init__()
@@ -84,7 +84,7 @@ class StopWordsCleanStep(AbstractCleanStep):
             lambda document: list(filter(lambda word: word not in self.stop_words, document)))
 
 
-class FilterEmptyDocumentsCleanStep(AbstractCleanStep):
+class FilterEmptyDocumentsCleanStep(BaseCleanStep):
 
     def __init__(self):
         super().__init__()
@@ -94,7 +94,7 @@ class FilterEmptyDocumentsCleanStep(AbstractCleanStep):
         return documents_collection[(documents_collection is not None) | (documents_collection != '')]
 
 
-class ApplyFunctionForDocumentCleanStep(AbstractCleanStep):
+class ApplyFunctionForDocumentCleanStep(BaseCleanStep):
 
     def __init__(self, f):
         super().__init__()
@@ -105,7 +105,7 @@ class ApplyFunctionForDocumentCleanStep(AbstractCleanStep):
         return documents_collection.apply(self.f)
 
 
-class RuLemmatizationCleanStep(AbstractCleanStep):
+class RuLemmatizationCleanStep(BaseCleanStep):
 
     def __init__(self, ignore_part_of_speech, ignore_no_russian_words=False):
         super().__init__()
