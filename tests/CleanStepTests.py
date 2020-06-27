@@ -46,9 +46,19 @@ class NtlkTokenizeCleanStep(unittest.TestCase):
     def test_should_tokenize_text(self):
         data = ['first document', 'second document']
         tokenize_clean_step = text_clean.NtlkTokenizeCleanStep()
-        actual_data = tokenize_clean_step(pd.Series(data))
         expected_data = pd.Series([data[0].split(), data[1].split()])
+        actual_data = tokenize_clean_step(pd.Series(data))
         self.assertTrue(expected_data.equals(actual_data))
+
+
+class ToLowerCaseCleanStep(unittest.TestCase):
+
+    def test_should_to_lower_case_documents(self):
+        data = ['First DOCUMENT', 'SeConD documenT']
+        expected_data = pd.Series([data[0].lower(), data[1].lower()])
+        to_lower_clean_step = text_clean.ToLowerCaseDocumentCleanStep()
+        actual_data = to_lower_clean_step(pd.Series(data))
+        self.assertTrue(actual_data.equals(expected_data))
 
 
 if __name__ == '__main__':

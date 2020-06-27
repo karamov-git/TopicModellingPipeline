@@ -55,7 +55,7 @@ class ToLowerCaseDocumentCleanStep(BaseCleanStep):
         super().__init__()
 
     def __call__(self, *args, **kwargs):
-        documents_collection = super().__call__(args)
+        documents_collection = super().__call__(*args)
         return documents_collection.apply(lambda document: document.lower())
 
 
