@@ -77,5 +77,22 @@ class StopWordsCleanStep(unittest.TestCase):
         self.assertTrue(actual_data.equals(expected_data))
 
 
+class FilterEmptyDocumentsCleanStepTests(unittest.TestCase):
+
+    def test_should_remove_empty_documents(self):
+        data = ['first document', '', 'second document', None]
+        expected_data = pd.Series(['first document', 'second document'])
+        step = text_clean.FilterEmptyDocumentsCleanStep()
+        actual_data = step(pd.Series(data)).reset_index(drop=True)
+        self.assertTrue(actual_data.equals(expected_data))
+
+    def test_after_removing_not_drop_index(self):
+        data = ['first document', '', 'second document']
+        expected_index = [0, 2]
+        step = text_clean.FilterEmptyDocumentsCleanStep()
+        actual_index = step(pd.Series(data)).index.to_list()
+        self.assertTrue(expected_index == actual_index)
+
+
 if __name__ == '__main__':
     unittest.main()

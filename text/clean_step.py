@@ -90,8 +90,8 @@ class FilterEmptyDocumentsCleanStep(BaseCleanStep):
         super().__init__()
 
     def __call__(self, *args, **kwargs):
-        documents_collection = super().__call__(args)
-        return documents_collection[(documents_collection is not None) | (documents_collection != '')]
+        documents_collection = super().__call__(*args)
+        return documents_collection[(documents_collection.notnull()) & (documents_collection != '')]
 
 
 class ApplyFunctionForDocumentCleanStep(BaseCleanStep):
