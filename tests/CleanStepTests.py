@@ -46,8 +46,8 @@ class NtlkTokenizeCleanStep(unittest.TestCase):
     def test_should_tokenize_text(self):
         data = ['first document', 'second document']
         tokenize_clean_step = text_clean.NtlkTokenizeCleanStep()
-        expected_data = pd.Series([data[0].split(), data[1].split()])
         actual_data = tokenize_clean_step(pd.Series(data))
+        expected_data = pd.Series([data[0].split(), data[1].split()])
         self.assertTrue(expected_data.equals(actual_data))
 
 
