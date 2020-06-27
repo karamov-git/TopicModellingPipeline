@@ -61,7 +61,7 @@ class ToLowerCaseCleanStep(unittest.TestCase):
         self.assertTrue(actual_data.equals(expected_data))
 
 
-class StopWordsCleanStep(unittest.TestCase):
+class StopWordsCleanStepTest(unittest.TestCase):
 
     def test_should_raise_exception_when_series_element_not_list(self):
         data = ['not split document']
