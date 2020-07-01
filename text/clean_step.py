@@ -3,8 +3,7 @@ import re
 import pandas as pd
 from bs4 import BeautifulSoup
 from nltk.tokenize import word_tokenize
-import pymorphy2
-from pymorphy2.tagset import OpencorporaTag
+from pymystem3 import Mystem
 
 
 class BaseCleanStep:
@@ -107,29 +106,16 @@ class ApplyFunctionForDocumentCleanStep(BaseCleanStep):
 
 class RuLemmatizationCleanStep(BaseCleanStep):
 
-    def __init__(self, ignore_part_of_speech, ignore_no_russian_words=False):
+    def __init__(self):
         super().__init__()
-        self.ignore_part_of_speech = ignore_part_of_speech
-        self.ignore_no_russian_words = ignore_no_russian_words
-        self.analyzer = pymorphy2.MorphAnalyzer()
+        self.analyzer = Mystem()
 
     def __call__(self, *args, **kwargs):
-        documents_collection = super().__call__(args)
-        if not isinstance(documents_collection[0], list):
-            raise ValueError('This step should take series of list words from documents, but get {}'.format(
-                type(documents_collection[0])))
+        documents_collection = super().__call__(*args)
         return documents_collection.apply(self.__lemmatize)
 
-    def __lemmatize(self, words):
-        lemmatization_words = []
-        for word in words:
-            morph = max(self.analyzer.parse(word), key=lambda x: x.score)
-            if morph.tag == OpencorporaTag('LATN') and self.ignore_no_russian_words:
-                continue
-            if morph.tag == OpencorporaTag('LATN'):
-                lemmatization_words.append(word)
-                continue
-            if morph.tag.POS in self.ignore_part_of_speech:
-                continue
-            lemmatization_words.append(morph.normal_form)
-        return lemmatization_words
+    def __lemmatize(self, document):
+        lemmatization_document = [word for word in self.analyzer.lemmatize(document) if
+                                  word not in ['', '\n', '\t', None]]
+
+        return ''.join(lemmatization_document)

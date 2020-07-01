@@ -107,5 +107,22 @@ class ApplyFunctionForDocumentCleanStepTests(unittest.TestCase):
         self.assertTrue(actual_data.equals(expected_data))
 
 
+class RuLemmatizationCleanStepTests(unittest.TestCase):
+
+    def test_should_normalize_words(self):
+        data = ['первые документам', 'второй документов']
+        expected_data = pd.Series(['первый документ', 'второй документ'])
+        step = text_clean.RuLemmatizationCleanStep()
+        actual_data = step(pd.Series(data))
+        self.assertTrue(actual_data.equals(expected_data))
+
+    def test_should_ignore_not_russian_words(self):
+        data = ['I saw их днём']
+        expected_data = pd.Series(['I saw их день'])
+        step = text_clean.RuLemmatizationCleanStep()
+        actual_data = step(pd.Series(data))
+        self.assertTrue(actual_data.equals(expected_data))
+
+
 if __name__ == '__main__':
     unittest.main()
