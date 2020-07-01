@@ -29,8 +29,8 @@ jobs:
         pip install --user -U nltk
         pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi    
-    - name: Test with pytest
-      run: |
-        python -m unittest tests.CleanStepTests
-        python -m unittest tests.PipelineTextCleanerTests
+    - name: Run tests
+      run: coverage run src/tests.py
+    - name: Tests report
+      run: coverage report
 
