@@ -94,5 +94,18 @@ class FilterEmptyDocumentsCleanStepTests(unittest.TestCase):
         self.assertTrue(expected_index == actual_index)
 
 
+class ApplyFunctionForDocumentCleanStepTests(unittest.TestCase):
+
+    def test_should_apply_some_function_above_each_document(self):
+        def some_function(document):
+            return document.upper()
+
+        data = ['first document', 'second document']
+        expected_data = pd.Series([some_function(data[0]), some_function(data[1])])
+        step = text_clean.ApplyFunctionForDocumentCleanStep(some_function)
+        actual_data = step(pd.Series(data))
+        self.assertTrue(actual_data.equals(expected_data))
+
+
 if __name__ == '__main__':
     unittest.main()
