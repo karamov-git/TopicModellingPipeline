@@ -124,5 +124,15 @@ class RuLemmatizationCleanStepTests(unittest.TestCase):
         self.assertTrue(actual_data.equals(expected_data))
 
 
+class RegexCleanStepTest(unittest.TestCase):
+
+    def test_should_apply_regex_for_each_documents(self):
+        data = ['Привет, today 23 хорошая- 0погода1.\n \u2022Первый пункт \u25E6Second']
+        expected_data = pd.Series(['Привет  today    хорошая   погода     Первый пункт  Second'])
+        step = text_clean.RegexCleanStep(r'\W|\d')
+        actual_data = step(pd.Series(data))
+        self.assertTrue(expected_data.equals(actual_data))
+
+
 if __name__ == '__main__':
     unittest.main()

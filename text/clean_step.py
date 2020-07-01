@@ -64,8 +64,8 @@ class RegexCleanStep(BaseCleanStep):
         self.regex = re.compile(pattern, flags)
 
     def __call__(self, *args, **kwargs):
-        documents_collection = super().__call__(args)
-        return documents_collection.apply(lambda document: self.regex.sub(" ", document))
+        documents_collection = super().__call__(*args)
+        return documents_collection.apply(lambda document: self.regex.sub(' ', document))
 
 
 class StopWordsCleanStep(BaseCleanStep):
