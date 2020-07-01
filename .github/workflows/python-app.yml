@@ -32,8 +32,8 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi    
     - name: Run tests
       run: | 
-        python -m coverage run tests/CleanStepTests.py
-        python -m coverage run tests/PipelineTextCleanerTests.py
+        coverage run tests/CleanStepTests.py
+        coverage run tests/PipelineTextCleanerTests.py
     - name: Tests report
       run: python -m coverage report
 
