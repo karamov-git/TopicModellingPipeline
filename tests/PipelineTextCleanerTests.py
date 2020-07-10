@@ -1,6 +1,6 @@
 import unittest
-import text.clean_step as text_clean
-from text_preprocessors import PipelineTextCleaner
+import tmp.text.clean_step as text_clean
+from tmp.text_preprocessors import PipelineTextCleaner
 import pandas as pd
 
 

@@ -1,5 +1,5 @@
 import unittest
-import text.clean_step as text_clean
+import tmp.text.clean_step as text_clean
 import pandas as pd
 
 
