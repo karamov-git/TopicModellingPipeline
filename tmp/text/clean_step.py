@@ -109,6 +109,7 @@ class RuLemmatizationCleanStep(BaseCleanStep):
     def __init__(self):
         super().__init__()
         self.analyzer = Mystem()
+        self.count = 0
 
     def __call__(self, *args, **kwargs):
         documents_collection = super().__call__(*args)
@@ -117,5 +118,6 @@ class RuLemmatizationCleanStep(BaseCleanStep):
     def __lemmatize(self, document):
         lemmatization_document = [word for word in self.analyzer.lemmatize(document) if
                                   word not in ['', '\n', '\t', None]]
-
+        self.count = self.count + 1
+        print(self.count)
         return ''.join(lemmatization_document)

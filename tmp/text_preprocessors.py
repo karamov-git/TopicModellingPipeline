@@ -23,5 +23,6 @@ class PipelineTextCleaner(AbstractTextCleaner):
         cleaned_data = raw_documents_collection
         for step in self.pipeline_steps:
             cleaned_data = step(cleaned_data)
+            print('end step {}. len: {}'.format(type(step), len(cleaned_data)))
 
         return cleaned_data
